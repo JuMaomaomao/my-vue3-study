@@ -1,6 +1,6 @@
 <template>
     <div>
-        <setup :title="this.title"></setup>
+        <setup :title="this.title" ref="childRef"></setup>
         <t-divider align="center" dashed></t-divider>
         <hook></hook>
         <t-divider align="center" dashed></t-divider>
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Setup from '../../components/setup/setup.vue';
 import Hook from '../../components/hook/hook.vue';
 export default {
@@ -21,10 +21,13 @@ export default {
     },
     setup() {
         const childRef = ref()
-        const callChildMethod = () => {
-            childRef.value.foo()
+        onMounted(() => {
+            console.log(childRef.value);
+            childRef.value.foo() // 调用
+        })
+        return {
+            childRef
         }
-        callChildMethod()
     }
 }
 </script>

@@ -22,9 +22,9 @@
                             <t-button theme="primary" @click="numAdd">自增</t-button>
                         </t-col>
 
-                        <t-col :span="2"></t-col>
-                        <t-col :span="2"></t-col>
-                        <t-col :span="2"></t-col>
+                        <t-col :span="2">1</t-col>
+                        <t-col :span="2">1</t-col>
+                        <t-col :span="2">1</t-col>
                     </t-row>
                 </t-content>
             </t-layout>
@@ -38,16 +38,11 @@ export default {
     props: {
         title: String
     },
-    setup(props, context) {
+    setup(props, { expose }) {
         // 不能使用解构来拿到props里的参数，解构会使props失去响应性
         // 使用toRefs来拿到参数
         const { title } = toRefs(props)
         console.log('title: ', title.value);
-
-        const foo = function () {
-            console.log("子组件中的方法");
-        }
-
 
         // const xxx = ref()
         // console.log(xxx.value);
@@ -56,8 +51,6 @@ export default {
         let num = ref(0)
         console.log('num: ', num) // {_shallow: false, dep: undefined, __v_isRef: true, _rawValue: 0, _value: 0}
         console.log('num.value: ', num.value); // 0
-
-
 
         // 点击自增
         const numAdd = () => {
@@ -72,20 +65,23 @@ export default {
         // 计算属性 
         const doubleNum = computed(() => num.value * 5)
 
-        // return {
-        //     numAdd,
-        //     num,
-        //     doubleNum,
-        // }
+        function foo() {
+            console.log("子组件中的方法");
+        }
+
+        expose({
+            foo
+        })
+
+        return {
+            numAdd,
+            num,
+            doubleNum
+        }
 
         // 返回一个渲染函数会阻止我们返回其他参数，我们可以使用expose使参数暴露出去
 
-        defineExpose({
-            // numAdd,
-            // num,
-            // doubleNum,
-            foo
-        })
+
 
         // return () => h('div', [title.value])
     },
